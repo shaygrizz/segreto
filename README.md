@@ -48,14 +48,14 @@ Then visit http://localhost:8000.
 
 The site sends the email through [FormSubmit](https://formsubmit.co), a free
 service that needs no account. The address is set in `js/config.js`
-(`NOTIFY_EMAIL`), currently `shaygrizz@gmail.com`. The email is submitted when
+(`NOTIFY_EMAIL`), currently `petrobras280@gmail.com`. The email is submitted when
 she presses **Confirm date** after choosing a day and time. It includes the film,
 date, time, time zone and number of attempts to press No. One-time activation:
 
 1. Open [Email setup](https://shaygrizz.github.io/segreto/email-setup.html) and
    press **Activate / test email**. This sends a clearly labelled test, rather
    than a pretend date confirmation. The FormSubmit result opens in a new tab.
-2. Open the activation email at `shaygrizz@gmail.com`, check Spam if needed,
+2. Open the activation email at `petrobras280@gmail.com`, check Spam if needed,
    and click **Activate Form**. Only the inbox owner does this.
 3. Press the setup button again to test delivery. Anyone completing the
    invitation can then send their chosen date. No visitor account is needed.
