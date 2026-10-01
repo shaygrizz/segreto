@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" class="lock">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14070e">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Will you go on a date with me?</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%23e7a8b8'%3E%E2%99%A5%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+  <canvas id="portraits" aria-hidden="true"></canvas>
+  <canvas id="fx" aria-hidden="true"></canvas>
+
+  <main>
+    <!-- 1. The question -->
+    <section class="scene" id="s-ask">
+      <h1 id="title" aria-label="My beautiful girlfriend, will you go on a date with me?"><span class="t-done"></span><span class="t-rest">My beautiful girlfriend, will you go on a date with me?</span></h1>
+
+      <p class="lead rv">I'd love to spend an evening with you. A movie night on Discord, just the two of us.</p>
+
+      <div class="trailer rv" id="trailer" role="button" tabindex="0" aria-label="Play the trailer">
+        <img id="poster" alt="">
+        <span class="film">(500) Days of Summer</span>
+        <span class="play" aria-hidden="true"></span>
+      </div>
+
+      <p class="status" id="trailerHelp" role="status" hidden>To watch the trailer here, open the hosted website or use Start Website.bat from the downloaded folder.</p>
+
+      <p class="ask rv">So, what do you say?</p>
+
+      <div class="choices rv">
+        <button class="btn primary" id="yes" type="button">Yes</button>
+        <span id="noSlot"><button class="btn" id="no" type="button">No, I love Prince Diamond</button></span>
+      </div>
+      <p class="caption" id="caption" aria-live="polite"></p>
+    </section>
+
+    <!-- 2. When -->
+    <section class="scene" id="s-time" hidden>
+      <h2>When works for you?</h2>
+      <p class="lead">Pick a day and a time.</p>
+
+      <div class="cal">
+        <div class="cal-head">
+          <button class="cal-nav" id="prev" type="button" aria-label="Previous month">&#8249;</button>
+          <span id="calTitle"></span>
+          <button class="cal-nav" id="next" type="button" aria-label="Next month">&#8250;</button>
+        </div>
+        <div class="grid" id="grid"></div>
+      </div>
+
+      <div class="times" id="times" hidden>
+        <p class="sub">Hour</p>
+        <div class="chips" id="hours"></div>
+        <p class="sub">Minutes</p>
+        <div class="chips" id="mins"></div>
+      </div>
+
+      <p class="summary" id="summary"></p>
+      <button class="btn primary" id="confirm" type="button" disabled>Confirm date</button>
+    </section>
+
+    <!-- 3. Done -->
+    <section class="scene" id="s-done" hidden>
+      <h2>Yaaayy!</h2>
+      <p class="lead">It's a date.</p>
+
+      <div class="ticket">
+        <div class="t-film" id="tFilm"></div>
+        <div id="tDay"></div>
+        <div id="tTime"></div>
+        <div>On Discord</div>
+      </div>
+
+      <p class="count" id="count"></p>
+      <p class="status" id="status" aria-live="polite"></p>
+
+      <button class="btn" id="retryEmail" type="button" hidden>Try sending again</button>
+
+    </section>
+  </main>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <canvas id="scratch" role="img" aria-label="Scratch me for a surprise"></canvas>
+  <canvas id="spark" aria-hidden="true"></canvas>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
