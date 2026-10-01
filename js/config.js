@@ -6,5 +6,8 @@ window.CONFIG = {
 
   // The email that receives the date and time once she confirms.
   // Sent through FormSubmit (formsubmit.co). See README.md for the one-time activation.
-  NOTIFY_EMAIL: "shaygrizz@gmail.com"
+  NOTIFY_EMAIL: "shaygrizz@gmail.com",
+
+  // Keep this identical for setup and all submissions, so the form is activated once.
+  FORM_URL: "https://shaygrizz.github.io/segreto/"
 };

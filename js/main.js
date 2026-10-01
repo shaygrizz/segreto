@@ -623,7 +623,8 @@
      7. Confirm: ticket, countdown, notification
   ------------------------------------------------------------ */
   var when = null, cdTimer = 0, dateInfo = null, notifying = false;
-  var status = $("#status"), retryEmail = $("#retryEmail");
+  var status = $("#status"), retryEmail = $("#retryEmail"), anotherDate = $("#anotherDate");
+  var directEmail = $("#directEmail");
 
   function startCount() {
     clearInterval(cdTimer);
@@ -639,34 +640,60 @@
     cdTimer = setInterval(tick, 1000);
   }
 
-  // Sends the email through FormSubmit (formsubmit.co). Needs a one-time activation, see README.md.
+  // _url identifies the same form during setup, retries and later visits.
+  function emailFields(info) {
+    return {
+      _url: CONFIG.FORM_URL || location.href.split(/[?#]/)[0],
+      _subject: "She said YES! " + info.day + " at " + info.time,
+      _captcha: "false",
+      _template: "table",
+      message: info.message,
+      date: info.day,
+      time: info.time,
+      time_zone: info.tz,
+      film: FILM,
+      confirmed_at: info.confirmedAt,
+      no_button_presses: String(noCount)
+    };
+  }
+
+  function prepareDirectEmail(info) {
+    directEmail.action = "https://formsubmit.co/" + encodeURIComponent(CONFIG.NOTIFY_EMAIL || "");
+    Array.prototype.forEach.call(directEmail.querySelectorAll("input"), function (input) { input.remove(); });
+    var fields = emailFields(info);
+    Object.keys(fields).forEach(function (name) {
+      var input = document.createElement("input");
+      input.type = "hidden"; input.name = name; input.value = fields[name];
+      directEmail.appendChild(input);
+    });
+  }
+
+  // FormData avoids the extra JSON CORS preflight. There is no per-person send limit.
   function sendEmail(info) {
     var to = CONFIG.NOTIFY_EMAIL;
-    if (!to) return Promise.resolve(false);
+    if (!to) return Promise.resolve({ ok: false, message: "The notification email is not configured." });
+    var data = new FormData(), fields = emailFields(info);
+    Object.keys(fields).forEach(function (name) { data.append(name, fields[name]); });
     var controller = new AbortController();
-    var timeout = setTimeout(function () { controller.abort(); }, 15000);
+    var timeout = setTimeout(function () { controller.abort(); }, 30000);
     return fetch("https://formsubmit.co/ajax/" + encodeURIComponent(to), {
       method: "POST",
       signal: controller.signal,
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({
-        _subject: "She said YES! " + info.day + " at " + info.time,
-        _captcha: "false",
-        _template: "table",
-        message: info.message,
-        date: info.day,
-        time: info.time,
-        time_zone: info.tz,
-        film: FILM,
-        confirmed_at: info.confirmedAt,
-        no_button_presses: String(noCount)
-      })
+      headers: { "Accept": "application/json" },
+      body: data
     }).then(function (r) {
-      return r.json().then(function (j) { return r.ok && (j.success === true || j.success === "true"); },
-                           function () { return false; });
-    }, function () { return false; }).then(function (ok) {
+      return r.json().then(function (j) {
+        var message = typeof j.message === "string" ? j.message : typeof j.error === "string" ? j.error : "";
+        return { ok: r.ok && (j.success === true || j.success === "true"),
+          activation: /activat|confirm.*email|verify.*email/i.test(message),
+          message: message || (r.ok ? "FormSubmit did not accept the submission." : "FormSubmit returned HTTP " + r.status + ".") };
+      });
+    }).catch(function (error) {
+      return { ok: false, message: error.name === "AbortError" ? "FormSubmit took too long to respond."
+        : "Could not reach FormSubmit. Check your connection or use the direct send button below." };
+    }).then(function (result) {
       clearTimeout(timeout);
-      return ok;
+      return result;
     });
   }
 
@@ -675,19 +702,37 @@
     notifying = true;
     retryEmail.hidden = true;
     retryEmail.disabled = true;
+    anotherDate.disabled = true;
+    directEmail.hidden = true;
     status.textContent = "Sending the details\u2026";
-    sendEmail(dateInfo).then(function (ok) {
+    prepareDirectEmail(dateInfo);
+    sendEmail(dateInfo).then(function (result) {
       notifying = false;
       retryEmail.disabled = false;
-      if (ok) {
+      anotherDate.disabled = false;
+      retryEmail.hidden = false;
+      if (result.activation) {
+        status.textContent = "One-time setup: open the FormSubmit activation email sent to " + CONFIG.NOTIFY_EMAIL +
+          ", check Spam too, and click Activate Form. Then send the details again.";
+        retryEmail.textContent = "Send after activation";
+        directEmail.hidden = false;
+      } else if (result.ok) {
         status.textContent = "All set! Your date details have been submitted.";
+        retryEmail.textContent = "Send details again";
       } else {
-        status.textContent = "Your date is confirmed, but the email couldn\u2019t be sent. Please try again.";
-        retryEmail.hidden = false;
+        status.textContent = "Your date is saved here, but the email was not submitted. " + result.message;
+        retryEmail.textContent = "Try sending again";
+        directEmail.hidden = false;
       }
     });
   }
   retryEmail.addEventListener("click", notify);
+  anotherDate.addEventListener("click", function () {
+    if (notifying) return;
+    clearInterval(cdTimer);
+    go("s-time");
+    refresh();
+  });
 
   confirmBtn.addEventListener("click", function () {
     if (confirmBtn.disabled || !state.date || state.hour === null) return;

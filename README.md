@@ -52,22 +52,37 @@ service that needs no account. The address is set in `js/config.js`
 she presses **Confirm date** after choosing a day and time. It includes the film,
 date, time, time zone and number of attempts to press No. One-time activation:
 
-1. Put the site online (or run it locally) and go through it once yourself,
-   all the way to the last page.
-2. FormSubmit emails you an activation message. Open it and click the
-   activation button. Check your spam folder if you do not see it.
-3. Go through the site again. From now on every finished date sends you an email
-   with the day, time, and how many times she tried to press No.
+1. Open [Email setup](https://shaygrizz.github.io/segreto/email-setup.html) and
+   press **Activate / test email**. This sends a clearly labelled test, rather
+   than a pretend date confirmation. The FormSubmit result opens in a new tab.
+2. Open the activation email at `shaygrizz@gmail.com`, check Spam if needed,
+   and click **Activate Form**. Only the inbox owner does this.
+3. Press the setup button again to test delivery. Anyone completing the
+   invitation can then send their chosen date. No visitor account is needed.
+
+Setup, AJAX sends and direct sends use the same `FORM_URL` in `js/config.js`.
+Keep that URL stable after activation; a different site or recipient may need
+another activation. When moving the website, update this value.
 
 Tip: the activation email also gives you a random alias for your form. You can
 paste that alias into `NOTIFY_EMAIL` instead of your address, so your real email
 is not visible in the public page source.
 
-The final page has no copy-message prompt or Copy button. If an email request
-fails, she can press **Try sending again** without repeating the invitation.
-The page reports submission to the email service; inbox delivery depends on
-activation and the email provider. Test the flow and activate it before sharing
-the website. The movie night itself remains on Discord.
+The final page has no copy-message prompt or Copy button. **Send details again**
+can send another email after success; **Choose another date** returns to the
+calendar and permits a fresh confirmation. Only simultaneous requests are
+blocked, to avoid accidental double-clicks. There is no per-person or lifetime
+submission limit in the site.
+
+Requests use FormData without a JSON preflight and include the full form URL.
+Failures show the service's message; activation responses explain what to do.
+If AJAX fails, **Send through FormSubmit** submits the same details directly in
+another tab. The setup page uses a regular POST form for activation too.
+
+FormSubmit advertises unlimited submissions, but its anti-spam controls and
+email-provider filtering can affect delivery, especially with reCAPTCHA off.
+The page confirms submission to the service, not arrival in the inbox. Activate
+and test it before sharing the invitation. The movie night remains on Discord.
 
 The trailer plays inside the page. The embed sends the site's origin and referrer,
 and falling decorations stay clear of the player during playback. Availability

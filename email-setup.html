@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Segreto — email setup</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .setup-copy { text-align: left; line-height: 1.7; }
+    .setup-copy li { margin-bottom: 12px; }
+    a { color: var(--rose); }
+    form { margin: 24px 0; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="scene">
+      <h1>Email setup</h1>
+      <p class="lead">One activation. Emails for every completed invitation.</p>
+      <ol class="setup-copy">
+        <li>Press the button below to send a clearly labelled setup test to <strong id="recipient">shaygrizz@gmail.com</strong>.</li>
+        <li>Open the email from FormSubmit and click <strong>Activate Form</strong>. Check Spam if needed.</li>
+        <li>After activation, use the button again to test delivery. Visitors can then send their date details whenever they finish the invitation.</li>
+      </ol>
+      <form id="setupForm" action="https://formsubmit.co/shaygrizz@gmail.com" method="POST" target="_blank">
+        <input type="hidden" name="_url" value="https://shaygrizz.github.io/segreto/">
+        <input type="hidden" name="_subject" value="Segreto: email setup test">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="message" value="This is an email setup test from Segreto, not a date confirmation. After activation, every completed invitation can send its details to this inbox.">
+        <button class="btn primary" type="submit">Activate / test email</button>
+      </form>
+      <p class="status">Only the inbox owner needs to activate the form. Other visitors do not need an account. This website does not cap submissions; FormSubmit may apply anti-spam limits.</p>
+      <p><a href="./">Back to the invitation</a></p>
+    </section>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/email-setup.js"></script>
+</body>
+</html>
