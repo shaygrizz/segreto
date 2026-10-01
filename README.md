@@ -89,8 +89,11 @@ and falling decorations stay clear of the player during playback. Availability
 still depends on YouTube and the video's embedding settings.
 
 The round pictures are fully opaque and fall in the background on either side
-of the invitation. They never cover the card, text, buttons or trailer. On narrow
-screens without room beside the card, the pictures are hidden.
+of the invitation. On phones they are smaller and use the empty strips beside
+the content, including the card's side padding. The canvas clips those strips
+and leaves an eight-pixel gap from the content, so pictures cannot cross over
+the text, buttons or trailer. Larger screens keep them outside the card.
+The trailer keeps the same centered 16:9 frame before and during playback.
 
 ## Customise
 

@@ -52,7 +52,16 @@
 
   function pictureLanes() {
     var area = pictureArea.getBoundingClientRect();
-    // Leave the card and its outer outline completely clear.
+    // On phones, include the card's empty side padding, up to the content edge.
+    // The eight-pixel gap and the canvas clip keep pictures away from the content.
+    if (fw <= 640) {
+      var content = $("#trailer").getBoundingClientRect();
+      return [
+        { left: 6, width: Math.max(0, content.left - 14) },
+        { left: content.right + 8, width: Math.max(0, fw - content.right - 14) }
+      ];
+    }
+    // Larger screens have enough space outside the card and its outer outline.
     return [
       { left: 6, width: Math.max(0, area.left - 16) },
       { left: area.right + 10, width: Math.max(0, fw - area.right - 16) }
@@ -64,7 +73,7 @@
     lanes.forEach(function (lane, index) { if (lane.width >= 20) available.push(index); });
     if (!available.length) return null;
     var side = available[Math.floor(Math.random() * available.length)], lane = lanes[side];
-    var maxW = Math.min(46, lane.width - 4), minW = Math.min(28, maxW);
+    var maxW = Math.min(fw <= 640 ? 28 : 46, lane.width - 4), minW = Math.min(28, maxW);
     var w = minW + Math.random() * (maxW - minW);
     return {
       side: side,
@@ -121,7 +130,7 @@
     for (var k = diamonds.length - 1; k >= 0; k--) {
       var d = diamonds[k];
       var lane = lanes[d.side];
-      if (!diamondOn || lane.width < d.w) { diamonds.splice(k, 1); continue; }
+      if (!diamondOn || lane.width < d.w || (fw <= 640 && d.w > 28)) { diamonds.splice(k, 1); continue; }
       d.ph += 0.02 * dt;
       d.x += Math.sin(d.ph) * d.sw * dt;
       d.x = Math.max(lane.left + d.w / 2, Math.min(lane.left + lane.width - d.w / 2, d.x));

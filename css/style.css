@@ -121,6 +121,9 @@ h2 { font-size: clamp(32px, 8.5vw, 46px); }
 /* Trailer */
 .trailer {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   aspect-ratio: 16 / 9;
   margin: 28px 0 10px;
   overflow: hidden;
@@ -180,7 +183,6 @@ h2 { font-size: clamp(32px, 8.5vw, 46px); }
 }
 .trailer:hover .play { transform: scale(1.08); background: rgba(74, 26, 49, 0.7); }
 .trailer.playing { cursor: default; }
-.trailer.playing { min-height: 200px; }
 .trailer.playing img, .trailer.playing .film, .trailer.playing .play, .trailer.playing::after { display: none; }
 .trailer iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
@@ -356,6 +358,11 @@ h2 { font-size: clamp(32px, 8.5vw, 46px); }
   transition: opacity 0.8s ease;
 }
 #scratch.gone { opacity: 0; pointer-events: none; }
+
+@media (max-width: 640px) {
+  /* Pictures remain behind the card, but stay sharp in the empty side strips. */
+  #s-ask { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .scene.enter, .times { animation: none; }
