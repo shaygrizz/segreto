@@ -726,7 +726,7 @@
         retryEmail.textContent = "Send after activation";
         directEmail.hidden = false;
       } else if (result.ok) {
-        status.textContent = "Your answer is already sending right to me, be ready for our date.";
+        status.textContent = "Your answer is already on its way to me. Get ready for our date!";
         retryEmail.textContent = "Send details again";
       } else {
         status.textContent = "Your date is saved here, but the email was not submitted. " + result.message;
